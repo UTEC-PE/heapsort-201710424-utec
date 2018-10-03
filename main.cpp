@@ -1,3 +1,4 @@
+//powered by apu.mp
 #include <iostream>
 #include <random>
 #include <assert.h>
@@ -13,6 +14,8 @@ mt19937 rng;
 int generateRandomInt(int min, int max);
 void printArray(int *array, size_t size);
 void heapsort(int* array, size_t size);
+void heapify(int* array, size_t size);
+void swapNodes(int* array, int indexA, int indexB);
 bool validate(int* array, size_t size);
 
 int main(int argc, char *argv[]) {
@@ -28,16 +31,15 @@ int main(int argc, char *argv[]) {
     }
 
     printArray(numbers, numberOfElements);
+    cout <<'\n';
     heapsort(numbers, numberOfElements);
     printArray(numbers, numberOfElements);
     assert(validate(numbers, numberOfElements) && "The sort is not ordering all the elements");
-
-    system("read");
-    return EXIT_SUCCESS;
+    return 0;
 }
 
 int generateRandomInt(int min, int max) {
-    uniform_int_distribution<mt19937::result_type> distribution(min, max); 
+    uniform_int_distribution<mt19937::result_type> distribution(min, max);
     return distribution(rng);
 }
 
@@ -45,16 +47,38 @@ void printArray(int *array, size_t size) {
     for (int i = 0; i < size; i++) {
         cout << array[i] << " ";
     }
-    cout << endl;
+    cout << "\n";
 }
 
 void heapsort(int* array, size_t size) {
-    // TODO
+  while (size!=0) {
+    heapify(array, size);
+    swapNodes(array, 0, size-1);
+    size--;
+  }
+}
+
+void heapify(int* array, size_t size) {
+  for (size_t i = 0; i < ((int) size / 2); i++) {
+    if (*(array)<*(array+(2*i)+1) && ((2*i)+1<size)) {
+      swapNodes(array, 0, (2*i)+1);
+    }
+    if (*(array)<*(array+(2*i)+2) && ((2*i)+2<size)) {
+      swapNodes(array, 0, (2*i)+2);
+    }
+  }
+}
+
+void swapNodes(int* array, int indexA, int indexB) {
+  int temp = *(array+indexA);
+  *(array+indexA) = *(array+indexB);
+  *(array+indexB) = temp;
 }
 
 bool validate(int* array, size_t size) {
     for (int i = 0; i < size - 1; i++) {
         if (array[i] > array[i + 1]) {
+            cout <<"Jaja saludos" <<array[i] <<array[i+1] <<"\n";
             return false;
         }
     }
